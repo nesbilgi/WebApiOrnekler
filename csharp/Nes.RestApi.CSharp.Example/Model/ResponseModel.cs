@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace Nes.RestApi.CSharp.Example.Model
 {
@@ -12,7 +14,6 @@ namespace Nes.RestApi.CSharp.Example.Model
     public class GeneralResponse<T>
     {
         public Status ErrorStatus { get; set; }
-        public HttpStatusCode HttpCode { get; set; }
         public T Result { get; set; }
     }
     #endregion
@@ -25,6 +26,7 @@ namespace Nes.RestApi.CSharp.Example.Model
         public string error { get; set; }
     }
 
+    #region Account
     public class AccountTemplateResponse
     {
         public string Title { get; set; }
@@ -36,4 +38,23 @@ namespace Nes.RestApi.CSharp.Example.Model
         EInvoice = 1,
         EArchive = 2
     }
+    #endregion
+
+    #region Customer
+    public class GlobalCustomer
+    {
+        public string RegisterNumber { get; set; }
+        public string Title { get; set; }
+        public string Alias { get; set; }
+        public string Type { get; set; }
+        public DateTime FirstCreationTime { get; set; }
+        public DateTime AliasCreationTime { get; set; }
+    }
+
+    public class CustomerCheckResponse
+    {
+        public List<GlobalCustomer> CustomerList { get; set; }
+        public bool ISEInvoiceCustomer { get; set; }
+    }
+    #endregion
 }

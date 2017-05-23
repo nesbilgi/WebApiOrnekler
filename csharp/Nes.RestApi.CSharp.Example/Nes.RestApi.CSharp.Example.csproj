@@ -49,6 +49,7 @@
     <Compile Include="Model\ResponseModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResponseParser.cs" />
     <Compile Include="Services\RequestService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -12,43 +12,26 @@ namespace Nes.RestApi.CSharp.Example
             requestService = new RequestService();
 
             #region GetToken
-            var requestModel = new TokenRequest() { username = "{Kullanıcı-Adı}", password = "{Şifre}" };
+            var requestModel = new TokenRequest() { username = "{Kullanıcı-Adı}", password = "Şifre" };
             var tokenResponse = requestService.GetToken(requestModel);
-
-            if (tokenResponse.HttpCode == System.Net.HttpStatusCode.OK)
-            {
-                accessToken = tokenResponse.Result.access_token;
-            }
-            else
-            {
-                var message = tokenResponse.Result.error; //hatalı kullanıcı adı/şifre
-            }
             #endregion
 
             #region Account
+            var templateListResponse = requestService.GetTemplateList(Constant.InvoiceType.eInvoice, accessToken);
 
-            #region GetTemplateList
-            var templateListResponse = requestService.GetTemplateList(Constant.InvoiceType.eArchive, accessToken);
-            if (templateListResponse.HttpCode == System.Net.HttpStatusCode.OK)
-            {
-                var result = templateListResponse.Result; //yanıt olarak gelen data
-            }
-            else
-            {
-                var message = tokenResponse.Result.error; //hata mesajı içeriği
-
-            }
-            #endregion
-
-            #region GetTemplate
             var model = new GetTemplateRequest()
             {
                 TemplateType = GetTemplateType.EInvoice,
-                Title = "NESYeni"
+                Title = "{Tasarım-Başlığı}"
             };
-
             var templateResponse = requestService.GetTemplate(model, accessToken);
             #endregion
+
+            #region Customer
+            string vknTckn = "{vkn-tckn}";
+            var checkCustomer = requestService.Check(vknTckn, accessToken);
+
+            var getAllCustomer = requestService.GetAllCustomerByList(accessToken);
             #endregion
 
 
