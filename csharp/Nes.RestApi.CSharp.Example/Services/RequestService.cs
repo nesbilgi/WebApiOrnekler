@@ -60,7 +60,7 @@ namespace Nes.RestApi.CSharp.Example.Services
             var request = SetHeaders("/account/getTemplate", accessToken);
             request.Method = Method.POST;
             request.AddBody(model);
-            var response = Client.Execute<GeneralResponse<string>>(request);
+            var response = Client.Execute(request);
             return response.Parse<string>();
         }
         #endregion
@@ -71,7 +71,7 @@ namespace Nes.RestApi.CSharp.Example.Services
             var request = SetHeaders("/customer/check", accessToken);
             request.Method = Method.POST;
             request.AddBody(vknTckn);
-            var response = Client.Execute<CustomerCheckResponse>(request);
+            var response = Client.Execute(request);
             return response.Parse<CustomerCheckResponse>();
         }
 
@@ -90,6 +90,98 @@ namespace Nes.RestApi.CSharp.Example.Services
             var response = Client.Execute(request);
 
             return response.Parse<byte[]>();
+        }
+        #endregion
+
+        #region EArchive
+        public GeneralResponse<InvoiceStatus> GetDocumentStatus(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/earchive/getDocumentStatus", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<InvoiceStatus>();
+        }
+
+        public GeneralResponse<List<MailSendInfo>> GetMailStatistics(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/earchive/getMailStatistics", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<List<MailSendInfo>>();
+        }
+
+        public GeneralResponse<bool> SetInvoiceCancel(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/earchive/setInvoiceCancel", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<bool>();
+        }
+
+        public GeneralResponse<List<SendMailResult>> SendMail(SendMailRequest model, string accessToken)
+        {
+            var request = SetHeaders("/earchive/sendMail", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(model);
+            var response = Client.Execute(request);
+            return response.Parse<List<SendMailResult>>();
+        }
+        #endregion
+
+        #region EInvoice
+        public GeneralResponse<EInvoiceStatusResult> EInvoiceGetDocumentStatus(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/einvoice/saleinvoicestatus", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<EInvoiceStatusResult>();
+        }
+
+        public GeneralResponse<List<string>> GetUnAnsweredInvoiceUUIDList(string accessToken)
+        {
+            var request = SetHeaders("/einvoice/getUnAnsweredInvoiceUUIDList", accessToken);
+            request.Method = Method.POST;
+            var response = Client.Execute(request);
+            return response.Parse<List<string>>();
+        }
+
+        public GeneralResponse<List<string>> GetUnTransferredInvoiceUUIDByAlias(string accountAlias, string accessToken)
+        {
+            var request = SetHeaders("/einvoice/getUnTransferredInvoiceUUIDByAlias", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(accountAlias);
+            var response = Client.Execute(request);
+            return response.Parse<List<string>>();
+        }
+
+        public GeneralResponse<List<string>> GetUnTransferredInvoiceUUIDList(string accessToken)
+        {
+            var request = SetHeaders("/einvoice/getUnTransferredInvoiceUUIDList", accessToken);
+            request.Method = Method.POST;
+            var response = Client.Execute(request);
+            return response.Parse<List<string>>();
+        }
+
+        public GeneralResponse<bool> SetInvoiceTransferred(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/einvoice/setInvoiceTransferred", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<bool>();
+        }
+
+        public GeneralResponse<bool> SetInvoiceAnswer(SetInvoiceAnswer model, string accessToken)
+        {
+            var request = SetHeaders("/einvoice/setInvoiceAnswer", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(model);
+            var response = Client.Execute(request);
+            return response.Parse<bool>();
         }
         #endregion
     }
