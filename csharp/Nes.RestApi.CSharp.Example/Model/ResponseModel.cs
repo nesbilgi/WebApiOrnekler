@@ -24,4 +24,16 @@ namespace Nes.RestApi.CSharp.Example.Model
         public int expires_in { get; set; }
         public string error { get; set; }
     }
+
+    public class AccountTemplateResponse
+    {
+        public string Title { get; set; }
+        public bool IsDefault { get; set; }
+    }
+
+    public enum GetTemplateType
+    {
+        EInvoice = 1,
+        EArchive = 2
+    }
 }

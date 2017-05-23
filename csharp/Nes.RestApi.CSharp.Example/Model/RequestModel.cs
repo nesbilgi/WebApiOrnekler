@@ -7,4 +7,12 @@
         public string password { get; set; }
     }
     #endregion
+
+    #region Account
+    public class GetTemplateRequest
+    {
+        public string Title { get; set; }
+        public GetTemplateType TemplateType { get; set; }
+    }
+    #endregion
 }
