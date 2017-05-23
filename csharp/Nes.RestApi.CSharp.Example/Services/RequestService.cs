@@ -18,11 +18,11 @@ namespace Nes.RestApi.CSharp.Example.Services
             serializer = new JsonDeserializer();
         }
 
-        public RestRequest SetHeaders(string apiPath, string accessToken)
+        public RestRequest SetHeaders(string apiPath, string accessToken, string contentType = "application/json")
         {
             Request = new RestRequest();
             Request.Resource = apiPath;
-            Request.AddHeader("Content-Type", "application/json");
+            Request.AddHeader("Content-Type", contentType);
             Request.AddHeader("Authorization", "bearer " + accessToken);
             Request.RequestFormat = DataFormat.Json;
             return Request;
@@ -81,6 +81,15 @@ namespace Nes.RestApi.CSharp.Example.Services
             request.Method = Method.POST;
             var response = Client.Execute(request);
             return response.Parse<List<GlobalCustomer>>();
+        }
+
+        public GeneralResponse<byte[]> GetAllCustomerByZIP(string accessToken)
+        {
+            var request = SetHeaders("/customer/downloadZip", accessToken, "application/zip");
+            request.Method = Method.GET;
+            var response = Client.Execute(request);
+
+            return response.Parse<byte[]>();
         }
         #endregion
     }

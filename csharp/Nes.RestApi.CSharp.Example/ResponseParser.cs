@@ -12,10 +12,24 @@ namespace Nes.RestApi.CSharp.Example
 
             var result = new GeneralResponse<T>();
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK) { return restcsharpDeserializer.Deserialize<GeneralResponse<T>>(response); }
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                if (typeof(T) == typeof(byte[]))
+                {
+                    object bytes = response.RawBytes;
+                    return new GeneralResponse<T>()
+                    {
+                        Result = (T)bytes
+                    };
+                }
+                else
+                {
+                    return restcsharpDeserializer.Deserialize<GeneralResponse<T>>(response);
+                }
+            }
             else
             {
-                result = new GeneralResponse<T>() { Result = result.Result};
+                result = new GeneralResponse<T>() { Result = result.Result };
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
