@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static Nes.RestApi.CSharp.Example.Constant;
 
 namespace Nes.RestApi.CSharp.Example.Model
 {
@@ -34,10 +35,24 @@ namespace Nes.RestApi.CSharp.Example.Model
         public string RejectNote { get; set; }
         public bool IsDirectSend { get; set; }
     }
-    public enum ServiceAnswer
+   
+    #endregion
+
+    #region InvoiceGeneral
+    public class NESTransferDocument
     {
-        Accepted = 2,
-        Rejectted = 3
+        public string UUID { get; set; }
+        public string FileName { get; set; }
+        public byte[] ZIPBinaryDataArray { get; set; }
+        public bool IsDirectSend { get; set; }
+    }
+
+    public class CustomSendUBLInvoice
+    {
+        public NESTransferDocument TransferDocument { get; set; }
+        public InvoiceProfile InvoiceProfile { get; set; }
+        public string CustomerRegisterNumber { get; set; }
+        public string eInvoiceAlias { get; set; }
     }
     #endregion
 }

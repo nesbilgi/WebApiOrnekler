@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using static Nes.RestApi.CSharp.Example.Constant;
 
 namespace Nes.RestApi.CSharp.Example.Model
 {
@@ -32,12 +33,7 @@ namespace Nes.RestApi.CSharp.Example.Model
         public string Title { get; set; }
         public bool IsDefault { get; set; }
     }
-
-    public enum GetTemplateType
-    {
-        EInvoice = 1,
-        EArchive = 2
-    }
+    
     #endregion
 
     #region Customer
@@ -130,12 +126,17 @@ namespace Nes.RestApi.CSharp.Example.Model
         public EInvoiceEnvelopeInfo EnvelopeInfo { get; set; }
     }
 
-    public enum InvoiceAnswer
+    
+    #endregion
+
+    #region InvoiceGeneral
+
+    
+
+    public class GetInvoiceXmlResult
     {
-        None = 0,
-        Wait = 1,
-        Accepted = 2,
-        Rejectted = 3
+        public string XmlContent { get; set; }
+        public NESInvoiceType InvoiceType { get; set; }
     }
     #endregion
 }

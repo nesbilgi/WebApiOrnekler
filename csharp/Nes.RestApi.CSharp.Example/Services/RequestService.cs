@@ -2,6 +2,7 @@
 using RestSharp;
 using RestSharp.Deserializers;
 using System.Collections.Generic;
+using static Nes.RestApi.CSharp.Example.Constant;
 
 namespace Nes.RestApi.CSharp.Example.Services
 {
@@ -178,6 +179,53 @@ namespace Nes.RestApi.CSharp.Example.Services
         public GeneralResponse<bool> SetInvoiceAnswer(SetInvoiceAnswer model, string accessToken)
         {
             var request = SetHeaders("/einvoice/setInvoiceAnswer", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(model);
+            var response = Client.Execute(request);
+            return response.Parse<bool>();
+        }
+        #endregion
+
+        #region InvoiceGeneral
+        public GeneralResponse<GetInvoiceXmlResult> GetUBLInvoiceContent(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/invoicegeneral/getUBLXmlContent", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<GetInvoiceXmlResult>();
+        }
+
+        public GeneralResponse<string> GetInvoiceHtml(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/invoicegeneral/getInvoiceHtml", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<string>();
+        }
+
+        public GeneralResponse<byte[]> GetInvoicePdf(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/invoicegeneral/getInvoicePdf", accessToken, "application/pdf");
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<byte[]>();
+        }
+
+        public GeneralResponse<string> GetInvoiceNumberFromUUID(string invoiceUuid, string accessToken)
+        {
+            var request = SetHeaders("/invoicegeneral/getInvoiceNumberFromUUID", accessToken);
+            request.Method = Method.POST;
+            request.AddBody(invoiceUuid);
+            var response = Client.Execute(request);
+            return response.Parse<string>();
+        }
+
+        public GeneralResponse<bool> SendUBLInvoice<T>(T model, string accessToken)
+        {
+            var request = SetHeaders("/invoicegeneral/sendUBLInvoice", accessToken);
             request.Method = Method.POST;
             request.AddBody(model);
             var response = Client.Execute(request);

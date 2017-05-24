@@ -29,18 +29,32 @@ namespace Nes.RestApi.CSharp.Example
             }
             else
             {
-                result = new GeneralResponse<T>() { Result = result.Result };
-
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (!string.IsNullOrEmpty(response.Content))
                 {
-                    result.ErrorStatus = new Status() { Code = (int)response.StatusCode, Message = "API Istek Yolu Hatalı" };
+                    result = new GeneralResponse<T>() { Result = result.Result };
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        result.ErrorStatus = new Status() { Code = (int)response.StatusCode, Message = "API Istek Yolu Hatalı" };
+                    }
+                    else
+                    {
+                        result.ErrorStatus = restcsharpDeserializer.Deserialize<Status>(response);
+                        result.ErrorStatus.Code = (int)response.StatusCode;
+                    }
+                    return result;
                 }
-                else
+                else//sunucunun cevap vermediği durumlar
                 {
-                    result.ErrorStatus = restcsharpDeserializer.Deserialize<Status>(response);
-                    result.ErrorStatus.Code = (int)response.StatusCode;
+                    return new GeneralResponse<T>()
+                    {
+                        Result = result.Result,
+                        ErrorStatus = new Status()
+                        {
+                            Code = (int)response.StatusCode,
+                            Message = response.ErrorException != null ? response.ErrorException.Message : null
+                        }
+                    };
                 }
-                return result;
             }
         }
     }
