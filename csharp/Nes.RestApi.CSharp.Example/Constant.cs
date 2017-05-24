@@ -45,5 +45,25 @@
             PurchaseInvoice = 2,
             EArchiveInvoice = 3
         }
+
+        public enum SalesPlatform
+        {
+            INTERNET = 0,
+            NORMAL = 1
+        }
+        public enum SendType
+        {
+            KAGIT = 0,
+            ELEKTRONIK = 1
+        }
+
+        public enum SendInvoiceType
+        {
+            SATIS,
+            IADE,
+            ISTISNA,
+            TEVKIFAT,
+            IHRACKAYITLI
+        }
     }
 }

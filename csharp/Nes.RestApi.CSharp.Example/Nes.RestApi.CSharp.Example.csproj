@@ -48,12 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constant.cs" />
+    <Compile Include="InvoiceGenerator.cs" />
+    <Compile Include="Model\NESInvoice.cs" />
     <Compile Include="Model\RequestModel.cs" />
     <Compile Include="Model\ResponseModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseParser.cs" />
-    <Compile Include="Services\RequestService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
