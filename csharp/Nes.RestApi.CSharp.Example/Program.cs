@@ -10,7 +10,7 @@ namespace Nes.RestApi.CSharp.Example
     class Program
     {
         public static string accessToken = string.Empty;
-        public static string EInvoiceUUID = "EC3699E6-3177-DA44-8F33-D651B277021F";
+        public static string EInvoiceUUID = "198725EA-9E40-4503-996D-7D9ACD6B97AC";
         public static string EArchiveInvoiceUUID = "65BF1A86-A2E8-4475-9B7B-806409BBC277";
         public static string VknTckn = "1234567801";
         public static string Alias = "urn:mail:defaultpk@nesbilgi.com.tr";
@@ -286,25 +286,29 @@ namespace Nes.RestApi.CSharp.Example
         }
         public static void GetUBLXmlContent(string invoiceUuid)
         {
-            var request = SetHeaders("/invoicegeneral/getUBLXmlContent");
+            var request = SetHeaders("/invoicegeneral/getUBLXmlContent", "application/xml");
             request.Method = Method.POST;
             request.AddBody(new
             {
                 invoiceUuid = invoiceUuid
             });
             var response = Client.Execute(request);
-            var result = response.Parse<GetInvoiceXmlResult>();
+            var responseData = response.Parse<byte[]>();
+            string xmlContent = System.Text.Encoding.UTF8.GetString(responseData.Result);
+            File.WriteAllBytes(@"D:\Invoice.xml", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
         }
         public static void GetInvoiceHtml(string invoiceUuid)
         {
-            var request = SetHeaders("/invoicegeneral/getInvoiceHtml");
+            var request = SetHeaders("/invoicegeneral/getInvoiceHtml", "text/html");
             request.Method = Method.POST;
             request.AddBody(new
             {
                 invoiceUuid = invoiceUuid
             });
             var response = Client.Execute(request);
-            var result = response.Parse<string>();
+            var responseData = response.Parse<byte[]>();
+            string htmlContent = System.Text.Encoding.UTF8.GetString(responseData.Result);
+            File.WriteAllBytes(@"D:\Invoice.html", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
         }
         public static void GetInvoicePdf(string invoiceUuid)
         {
@@ -316,7 +320,7 @@ namespace Nes.RestApi.CSharp.Example
             });
             var response = Client.Execute(request);
             var responseData = response.Parse<byte[]>();
-            //File.WriteAllBytes(@"D:\Invoice.pdf", responseData.Result); ////Gelen data istenilen konuma yazdırılabilir.
+            File.WriteAllBytes(@"D:\Invoice.pdf", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
         }
         public static void GetInvoiceNumberFromUUID(string invoiceUuid)
         {
