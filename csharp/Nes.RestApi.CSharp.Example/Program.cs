@@ -28,35 +28,35 @@ namespace Nes.RestApi.CSharp.Example
             #endregion
 
             #region Account
-            TemplateList(Constant.InvoiceType.eInvoice); // Hesabınızda tanımlı olan XSLT listesinin detaylarını almak için kullanılır. 
-            GetTemplate(new GetTemplateRequest() { TemplateType = GetTemplateType.EInvoice, Title = "TASARIM_BASLIGI" }); //Hesabınızda tanımlı olan XSLT yi almak için kullanılır.
+            var templateListResponse = TemplateListRequest(Constant.InvoiceType.eInvoice); // Hesabınızda tanımlı olan XSLT listesinin detaylarını almak için kullanılır. 
+            var getTemplateResponse = GetTemplateRequest(new GetTemplateRequest() { TemplateType = GetTemplateType.EInvoice, Title = "TASARIM_BASLIGI" }); //Hesabınızda tanımlı olan XSLT yi almak için kullanılır.
             #endregion
 
             #region Customer
-            Check(VknTckn); //Bir firma/kişinin e-Fatura mükellefi olup olmadığını sorgulamak için kullanılır.
-            GetAll(); //GIB'de kayıtlı bütün E-Fatura mükelleflerini çekmek için kullanılır.
-            DownloadZip(); //GIB'de kayıtlı bütün E-Fatura mükelleflerini ZIP içerisinde XML olarak çekmek için kullanılır.
+            var checkResponse = CheckRequest(VknTckn); //Bir firma/kişinin e-Fatura mükellefi olup olmadığını sorgulamak için kullanılır.
+            var getAllResponse = GetAllRequest(); //GIB'de kayıtlı bütün E-Fatura mükelleflerini çekmek için kullanılır.
+            var downloadZipResponse = DownloadZipRequest(); //GIB'de kayıtlı bütün E-Fatura mükelleflerini ZIP içerisinde XML olarak çekmek için kullanılır.
             #endregion
 
             #region EArchive
-            GetDocumentStatus(EArchiveInvoiceUUID); //E-Arşiv faturalarının durumlarını sorgulamak için kullanılır.
-            GetMailStatistics(EArchiveInvoiceUUID); //E-Arşiv faturalarının mail durumlarını sorgulamak için kullanılır.
-            SetInvoiceCancel(EArchiveInvoiceUUID); //E-Arşiv faturaların iptal edilmesi için kullanılır.
+            var getDocumentStatusResponse = GetDocumentStatusRequest(EArchiveInvoiceUUID); //E-Arşiv faturalarının durumlarını sorgulamak için kullanılır.
+            var getMailStatisticsResponse = GetMailStatisticsRequest(EArchiveInvoiceUUID); //E-Arşiv faturalarının mail durumlarını sorgulamak için kullanılır.
+            var setInvoiceCancelResponse = SetInvoiceCancelRequest(EArchiveInvoiceUUID); //E-Arşiv faturaların iptal edilmesi için kullanılır.
 
             var sendMailRequest = new SendMailRequest()
             {
                 InvoiceUUID = EArchiveInvoiceUUID,
                 ReceiverMailList = new List<string>() { "ALICI_MAIL_ADRESI", "ALICI_MAIL_ADRESI_1", "ALICI_MAIL_ADRESI_2" }
             };
-            SendMail(sendMailRequest); //E-Arşiv faturalarını mail olarak göndermek için kullanılır
+            var sendMailResponse = SendMailRequest(sendMailRequest); //E-Arşiv faturalarını mail olarak göndermek için kullanılır
             #endregion
 
             #region EInvoice
 
-            SaleInvoiceStatus(EInvoiceUUID); //Giden E-Faturaların durumlarını sorgulamak için kullanılır.
-            GetUnAnsweredInvoiceUUIDList(); //Firmanıza gelen ve cevap verilmemiş olan Ticari Faturaların ETTn listesini almak için kullanılır. Burada dönen listedeki ETTN ler üzerinden faturaya cevap verme işlemini gerçekleştirebilirsiniz.
-            GetUnTransferredInvoiceUUIDList(Alias); //Firmanıza gelen ve içeriye aktarılmamış (ERP'ye Alınmamış) faturaların ETTN listesini almak için kullanılır. Etiket bilgisi opsiyoneldir. Detalar dokümantasyonda mevcuttur.
-            SetInvoiceTransferred(EInvoiceUUID); //ERP'ye yazılmış olan Gelen E-Faturanın NESBilgi üzerinde Transfer Edildi olarak işaretlemek için kullanılır.
+            var saleInvoiceStatusResponse = SaleInvoiceStatusRequest(EInvoiceUUID); //Giden E-Faturaların durumlarını sorgulamak için kullanılır.
+            var getUnAnsweredInvoiceUUIDListResponse = GetUnAnsweredInvoiceUUIDListRequest(); //Firmanıza gelen ve cevap verilmemiş olan Ticari Faturaların ETTn listesini almak için kullanılır. Burada dönen listedeki ETTN ler üzerinden faturaya cevap verme işlemini gerçekleştirebilirsiniz.
+            var getUnTransferredInvoiceUUIDListResponse = GetUnTransferredInvoiceUUIDListRequest(Alias); //Firmanıza gelen ve içeriye aktarılmamış (ERP'ye Alınmamış) faturaların ETTN listesini almak için kullanılır. Etiket bilgisi opsiyoneldir. Detalar dokümantasyonda mevcuttur.
+            var setInvoiceTransferredResponse = SetInvoiceTransferredRequest(EInvoiceUUID); //ERP'ye yazılmış olan Gelen E-Faturanın NESBilgi üzerinde Transfer Edildi olarak işaretlemek için kullanılır.
 
             var setInvoiceAnswerRequest = new SetInvoiceAnswer()
             {
@@ -65,14 +65,14 @@ namespace Nes.RestApi.CSharp.Example
                 IsDirectSend = true,
                 RejectNote = "RED_YANITI_GIRILIR"
             };
-            SetInvoiceAnswer(setInvoiceAnswerRequest); //Gelen Ticari E-Faturaya cevap vermek için kullanılır.
+            var setInvoiceAnswerResponse = SetInvoiceAnswerRequest(setInvoiceAnswerRequest); //Gelen Ticari E-Faturaya cevap vermek için kullanılır.
             #endregion
 
             #region InvoiceGeneral
-            GetUBLXmlContent(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Ariv Faturalarının UBL Xml içeriğini almak için kullanılır.
-            GetInvoiceHtml(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Ariv faturalarının HTML formatında önizlemesini almak için kullanılır.
-            GetInvoicePdf(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Arşiv Faturalarının PDF halini almak için kullanılır.
-            GetInvoiceNumberFromUUID(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Arşiv faturalarının 16 Haneli fatura numarasını almak için kullanılır.
+            var getUBLXmlContentResponse = GetUBLXmlContentRequest(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Ariv Faturalarının UBL Xml içeriğini almak için kullanılır.
+            var getInvoiceHtmlRequestResponse = GetInvoiceHtmlRequest(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Ariv faturalarının HTML formatında önizlemesini almak için kullanılır.
+            var getInvoicePdfResponse = GetInvoicePdfRequest(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Arşiv Faturalarının PDF halini almak için kullanılır.
+            var GetInvoiceNumberFromUUIDResponse = GetInvoiceNumberFromUUIDRequest(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Arşiv faturalarının 16 Haneli fatura numarasını almak için kullanılır.
 
 
             #region SendUBLInvoice//UBL Xml Formatında E-Fatura Göndermek İçin Kullanılır
@@ -99,7 +99,7 @@ namespace Nes.RestApi.CSharp.Example
                 customerRegisterNumber = VknTckn,
                 eInvoiceAlias = Alias
             };
-            SendUBLInvoice(sendUBLInvoiceRequest);
+            var sendUBLInvoiceResponse = SendUBLInvoiceRequest(sendUBLInvoiceRequest);
             #endregion
 
             #region SendNESInvoice//NESInvoice Formatında XML Göndermek İçin Kullanılır
@@ -124,7 +124,7 @@ namespace Nes.RestApi.CSharp.Example
                 customerRegisterNumber = VknTckn,
                 isDirectSend = true
             };
-            SendNESInvoice(sendNESInvoiceRequest);
+            var sendNESInvoiceResponse = SendNESInvoiceRequest(sendNESInvoiceRequest);
             #endregion
             #endregion
         }
@@ -154,7 +154,7 @@ namespace Nes.RestApi.CSharp.Example
                 Result = response.Data
             };
         }
-        public static void TemplateList(Constant.InvoiceType invoiceType)
+        public static GeneralResponse<List<AccountTemplateResponse>> TemplateListRequest(Constant.InvoiceType invoiceType)
         {
             var request = SetHeaders("/account/templateList");
             request.Method = Method.POST;
@@ -163,17 +163,17 @@ namespace Nes.RestApi.CSharp.Example
                 xsltType = invoiceType
             });
             var response = Client.Execute(request);
-            var result = response.Parse<List<AccountTemplateResponse>>();
+            return response.Parse<List<AccountTemplateResponse>>();
         }
-        public static void GetTemplate(GetTemplateRequest model)
+        public static GeneralResponse<string> GetTemplateRequest(GetTemplateRequest model)
         {
             var request = SetHeaders("/account/getTemplate", accessToken);
             request.Method = Method.POST;
             request.AddBody(model);
             var response = Client.Execute(request);
-            var result = response.Parse<string>();
+            return response.Parse<string>();
         }
-        public static void Check(string vknTckn)
+        public static GeneralResponse<CustomerCheckResponse> CheckRequest(string vknTckn)
         {
             var request = SetHeaders("/customer/check", accessToken);
             request.Method = Method.POST;
@@ -182,24 +182,25 @@ namespace Nes.RestApi.CSharp.Example
                 vknTckn = vknTckn
             });
             var response = Client.Execute(request);
-            var result = response.Parse<CustomerCheckResponse>();
+            return response.Parse<CustomerCheckResponse>();
         }
-        public static void GetAll()
+        public static GeneralResponse<List<GlobalCustomer>> GetAllRequest()
         {
             var request = SetHeaders("/customer/getAll", accessToken);
             request.Method = Method.POST;
             var response = Client.Execute(request);
-            var result = response.Parse<List<GlobalCustomer>>();
+            return response.Parse<List<GlobalCustomer>>();
         }
-        public static void DownloadZip()
+        public static GeneralResponse<byte[]> DownloadZipRequest()
         {
             var request = SetHeaders("/customer/downloadZip", "application/zip");
             request.Method = Method.GET;
             var response = Client.Execute(request);
             var responseData = response.Parse<byte[]>();
             //File.WriteAllBytes(@"D:\CustomerList.zip", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
+            return responseData;
         }
-        public static void GetDocumentStatus(string invoiceUuid)
+        public static GeneralResponse<InvoiceStatus> GetDocumentStatusRequest(string invoiceUuid)
         {
             var request = SetHeaders("/earchive/getDocumentStatus");
             request.Method = Method.POST;
@@ -208,9 +209,9 @@ namespace Nes.RestApi.CSharp.Example
                 invoiceUuid = invoiceUuid
             });
             var response = Client.Execute(request);
-            var result = response.Parse<InvoiceStatus>();
+            return response.Parse<InvoiceStatus>();
         }
-        public static void GetMailStatistics(string invoiceUuid)
+        public static GeneralResponse<List<MailSendInfo>> GetMailStatisticsRequest(string invoiceUuid)
         {
             var request = SetHeaders("/earchive/getMailStatistics");
             request.Method = Method.POST;
@@ -219,9 +220,9 @@ namespace Nes.RestApi.CSharp.Example
                 invoiceUuid = invoiceUuid
             });
             var response = Client.Execute(request);
-            var result = response.Parse<List<MailSendInfo>>();
+            return response.Parse<List<MailSendInfo>>();
         }
-        public static void SetInvoiceCancel(string invoiceUuid)
+        public static GeneralResponse<bool> SetInvoiceCancelRequest(string invoiceUuid)
         {
             var request = SetHeaders("/earchive/setInvoiceCancel");
             request.Method = Method.POST;
@@ -230,17 +231,17 @@ namespace Nes.RestApi.CSharp.Example
                 invoiceUuid = invoiceUuid
             });
             var response = Client.Execute(request);
-            var result = response.Parse<bool>();
+            return response.Parse<bool>();
         }
-        public static void SendMail(SendMailRequest model)
+        public static GeneralResponse<List<SendMailResult>> SendMailRequest(SendMailRequest model)
         {
             var request = SetHeaders("/earchive/sendMail");
             request.Method = Method.POST;
             request.AddBody(model);
             var response = Client.Execute(request);
-            var result = response.Parse<List<SendMailResult>>();
+            return response.Parse<List<SendMailResult>>();
         }
-        public static void SaleInvoiceStatus(string invoiceUuid)
+        public static GeneralResponse<EInvoiceStatusResult> SaleInvoiceStatusRequest(string invoiceUuid)
         {
             var request = SetHeaders("/einvoice/saleinvoicestatus");
             request.Method = Method.POST;
@@ -249,16 +250,16 @@ namespace Nes.RestApi.CSharp.Example
                 invoiceUuid = invoiceUuid
             });
             var response = Client.Execute(request);
-            var result = response.Parse<EInvoiceStatusResult>();
+            return response.Parse<EInvoiceStatusResult>();
         }
-        public static void GetUnAnsweredInvoiceUUIDList()
+        public static GeneralResponse<List<string>> GetUnAnsweredInvoiceUUIDListRequest()
         {
             var request = SetHeaders("/einvoice/getUnAnsweredInvoiceUUIDList");
             request.Method = Method.POST;
             var response = Client.Execute(request);
-            var result = response.Parse<List<string>>();
+            return response.Parse<List<string>>();
         }
-        public static void GetUnTransferredInvoiceUUIDList(string accountAlias)
+        public static GeneralResponse<List<string>> GetUnTransferredInvoiceUUIDListRequest(string accountAlias)
         {
             var request = SetHeaders("/einvoice/getUnTransferredInvoiceUUIDList");
             request.Method = Method.POST;
@@ -267,9 +268,9 @@ namespace Nes.RestApi.CSharp.Example
                 accountAlias = accountAlias
             }); //opsiyonel
             var response = Client.Execute(request);
-            var result = response.Parse<List<string>>();
+            return response.Parse<List<string>>();
         }
-        public static void SetInvoiceTransferred(string invoiceUuid)
+        public static GeneralResponse<bool> SetInvoiceTransferredRequest(string invoiceUuid)
         {
             var request = SetHeaders("/einvoice/setInvoiceTransferred");
             request.Method = Method.POST;
@@ -278,17 +279,17 @@ namespace Nes.RestApi.CSharp.Example
                 invoiceUuid = invoiceUuid
             });
             var response = Client.Execute(request);
-            var result = response.Parse<bool>();
+            return response.Parse<bool>();
         }
-        public static void SetInvoiceAnswer(SetInvoiceAnswer model)
+        public static GeneralResponse<bool> SetInvoiceAnswerRequest(SetInvoiceAnswer model)
         {
             var request = SetHeaders("/einvoice/setInvoiceAnswer");
             request.Method = Method.POST;
             request.AddBody(model);
             var response = Client.Execute(request);
-            var result = response.Parse<bool>();
+            return response.Parse<bool>();
         }
-        public static void GetUBLXmlContent(string invoiceUuid)
+        public static GeneralResponse<byte[]> GetUBLXmlContentRequest(string invoiceUuid)
         {
             var request = SetHeaders("/invoicegeneral/getUBLXmlContent", "application/xml");
             request.Method = Method.POST;
@@ -299,9 +300,10 @@ namespace Nes.RestApi.CSharp.Example
             var response = Client.Execute(request);
             var responseData = response.Parse<byte[]>();
             string xmlContent = System.Text.Encoding.UTF8.GetString(responseData.Result);
-            File.WriteAllBytes(@"D:\Invoice.xml", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
+            //File.WriteAllBytes(@"D:\Invoice.xml", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
+            return responseData;
         }
-        public static void GetInvoiceHtml(string invoiceUuid)
+        public static GeneralResponse<byte[]> GetInvoiceHtmlRequest(string invoiceUuid)
         {
             var request = SetHeaders("/invoicegeneral/getInvoiceHtml", "text/html");
             request.Method = Method.POST;
@@ -312,9 +314,10 @@ namespace Nes.RestApi.CSharp.Example
             var response = Client.Execute(request);
             var responseData = response.Parse<byte[]>();
             string htmlContent = System.Text.Encoding.UTF8.GetString(responseData.Result);
-            File.WriteAllBytes(@"D:\Invoice.html", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
+            //File.WriteAllBytes(@"D:\Invoice.html", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
+            return responseData;
         }
-        public static void GetInvoicePdf(string invoiceUuid)
+        public static GeneralResponse<byte[]> GetInvoicePdfRequest(string invoiceUuid)
         {
             var request = SetHeaders("/invoicegeneral/getInvoicePdf", "application/pdf");
             request.Method = Method.POST;
@@ -325,8 +328,10 @@ namespace Nes.RestApi.CSharp.Example
             var response = Client.Execute(request);
             var responseData = response.Parse<byte[]>();
             File.WriteAllBytes(@"D:\Invoice.pdf", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
+
+            return responseData;
         }
-        public static void GetInvoiceNumberFromUUID(string invoiceUuid)
+        public static GeneralResponse<string> GetInvoiceNumberFromUUIDRequest(string invoiceUuid)
         {
             var request = SetHeaders("/invoicegeneral/getInvoiceNumberFromUUID");
             request.Method = Method.POST;
@@ -335,23 +340,24 @@ namespace Nes.RestApi.CSharp.Example
                 invoiceUuid = invoiceUuid
             });
             var response = Client.Execute(request);
-            var result = response.Parse<string>();
+
+            return response.Parse<string>();
         }
-        public static void SendUBLInvoice<T>(T model)
+        public static GeneralResponse<bool> SendUBLInvoiceRequest<T>(T model)
         {
             var request = SetHeaders("/invoicegeneral/sendUBLInvoice");
             request.Method = Method.POST;
             request.AddBody(model);
             var response = Client.Execute(request);
-            var result = response.Parse<bool>();
+            return response.Parse<bool>();
         }
-        public static void SendNESInvoice<T>(T model)
+        public static GeneralResponse<bool> SendNESInvoiceRequest<T>(T model)
         {
             var request = SetHeaders("/invoicegeneral/sendNESInvoice");
             request.Method = Method.POST;
             request.AddBody(model);
             var response = Client.Execute(request);
-            var result = response.Parse<bool>();
+            return response.Parse<bool>();
         }
         #endregion
     }
