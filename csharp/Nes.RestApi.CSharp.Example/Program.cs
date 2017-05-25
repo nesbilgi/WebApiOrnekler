@@ -23,7 +23,8 @@ namespace Nes.RestApi.CSharp.Example
             Client = new RestClient(Nes.RestApi.CSharp.Example.Constant.BaseUrl);
 
             #region Token Alma İşlemi
-            GetToken(new TokenRequest() { username = "KULLANICI_ADI", password = "SIFRE" });
+            var tokenResult = GetToken(new TokenRequest() { username = "KULLANICI_ADI", password = "SIFRE" });
+            if (tokenResult.ErrorStatus == null) { accessToken = tokenResult.Result.access_token; }
             #endregion
 
             #region Account
@@ -74,6 +75,7 @@ namespace Nes.RestApi.CSharp.Example
             GetInvoiceNumberFromUUID(EInvoiceUUID); //Gelen/Giden E-Fatura veya E-Arşiv faturalarının 16 Haneli fatura numarasını almak için kullanılır.
 
 
+            #region SendUBLInvoice//UBL Xml Formatında E-Fatura Göndermek İçin Kullanılır
             ZipFile zip = new ZipFile();
             var xmlFile = @"D:\e-FaturaPaketi\e-FaturaPaketi\xml\be770327-b0fe-4511-9ff7-15936bcd1c17.xml";
             zip.AddEntry(Path.GetFileName(xmlFile), File.ReadAllBytes(xmlFile));
@@ -97,9 +99,10 @@ namespace Nes.RestApi.CSharp.Example
                 customerRegisterNumber = VknTckn,
                 eInvoiceAlias = Alias
             };
-            SendUBLInvoice(sendUBLInvoiceRequest); //
+            SendUBLInvoice(sendUBLInvoiceRequest);
+            #endregion
 
-
+            #region SendNESInvoice//NESInvoice Formatında XML Göndermek İçin Kullanılır
             var invoice = InvoiceGenerator.GetStandarInvoice();
             //Fatura üzerine ek bilgiler eklemek için kullanabilirsiniz.
             invoice.InvoiceInfo.AdditionalDocumentReferences = new System.Collections.Generic.List<AdditioanlDocumentReference>() { };
@@ -123,6 +126,7 @@ namespace Nes.RestApi.CSharp.Example
             };
             SendNESInvoice(sendNESInvoiceRequest);
             #endregion
+            #endregion
         }
 
         #region Metodlar
@@ -135,7 +139,7 @@ namespace Nes.RestApi.CSharp.Example
             Request.RequestFormat = DataFormat.Json;
             return Request;
         }
-        public static void GetToken(TokenRequest model)
+        public static GeneralResponse<TokenResponse> GetToken(TokenRequest model)
         {
             var request = new RestRequest("/token", Method.POST);
             request.AddHeader("Content-Type", "application/json"); //istek data tipi
@@ -144,7 +148,7 @@ namespace Nes.RestApi.CSharp.Example
             request.AddParameter("password", model.password); //şifre
 
             var response = Client.Execute<TokenResponse>(request);
-            var result = new GeneralResponse<TokenResponse>()
+            return new GeneralResponse<TokenResponse>()
             {
                 ErrorStatus = response.ErrorException != null ? new Status() { Code = (int)response.StatusCode, Message = response.ErrorException.Message } : null,
                 Result = response.Data
