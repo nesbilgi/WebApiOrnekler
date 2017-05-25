@@ -2,7 +2,7 @@
 {
     public  class Constant
     {
-        public const string BaseUrl = "http://localhost:49271";
+        public const string BaseUrl = "http://apitest.nesbilgi.com.tr/";
 
         public enum InvoiceType
         {
