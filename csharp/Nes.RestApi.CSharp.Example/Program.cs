@@ -156,38 +156,29 @@ namespace Nes.RestApi.CSharp.Example
         }
         public static GeneralResponse<List<AccountTemplateResponse>> TemplateListRequest(Constant.InvoiceType invoiceType)
         {
-            var request = SetHeaders("/account/templateList");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                xsltType = invoiceType
-            });
+            var request = SetHeaders($"/account/templateList/{invoiceType.ToString()}");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<List<AccountTemplateResponse>>();
         }
         public static GeneralResponse<string> GetTemplateRequest(GetTemplateRequest model)
         {
-            var request = SetHeaders("/account/getTemplate", accessToken);
-            request.Method = Method.POST;
-            request.AddBody(model);
+            var request = SetHeaders($"/account/downloadTemplate/{model.TemplateType.ToString()}/{model.Title}", accessToken);
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<string>();
         }
         public static GeneralResponse<CustomerCheckResponse> CheckRequest(string vknTckn)
         {
-            var request = SetHeaders("/customer/check", accessToken);
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                vknTckn = vknTckn
-            });
+            var request = SetHeaders($"/customer/check/{vknTckn}", accessToken);
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<CustomerCheckResponse>();
         }
         public static GeneralResponse<List<GlobalCustomer>> GetAllRequest()
         {
-            var request = SetHeaders("/customer/getAll", accessToken);
-            request.Method = Method.POST;
+            var request = SetHeaders("/customer/all", accessToken);
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<List<GlobalCustomer>>();
         }
@@ -202,34 +193,22 @@ namespace Nes.RestApi.CSharp.Example
         }
         public static GeneralResponse<InvoiceStatus> GetDocumentStatusRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/earchive/getDocumentStatus");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/earchive/documentStatus/{invoiceUuid}");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<InvoiceStatus>();
         }
         public static GeneralResponse<List<MailSendInfo>> GetMailStatisticsRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/earchive/getMailStatistics");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/earchive/mailStatistics/{invoiceUuid}");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<List<MailSendInfo>>();
         }
         public static GeneralResponse<bool> SetInvoiceCancelRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/earchive/setInvoiceCancel");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/earchive/invoiceCancel/{invoiceUuid}");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<bool>();
         }
@@ -243,47 +222,42 @@ namespace Nes.RestApi.CSharp.Example
         }
         public static GeneralResponse<EInvoiceStatusResult> SaleInvoiceStatusRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/einvoice/saleinvoicestatus");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/einvoice/saleinvoicestatus/{invoiceUuid}");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<EInvoiceStatusResult>();
         }
         public static GeneralResponse<List<string>> GetUnAnsweredInvoiceUUIDListRequest()
         {
-            var request = SetHeaders("/einvoice/getUnAnsweredInvoiceUUIDList");
-            request.Method = Method.POST;
+            var request = SetHeaders("/einvoice/unAnsweredUUIDList");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<List<string>>();
         }
         public static GeneralResponse<List<string>> GetUnTransferredInvoiceUUIDListRequest(string accountAlias)
         {
-            var request = SetHeaders("/einvoice/getUnTransferredInvoiceUUIDList");
-            request.Method = Method.POST;
-            request.AddBody(new
+            var url = "/einvoice/unTransferredUUIDList";
+            if (!string.IsNullOrEmpty(accountAlias))
             {
-                accountAlias = accountAlias
-            }); //opsiyonel
+                url += $"/{accountAlias}";
+            }
+            var request = SetHeaders(url);
+
+            request.Method = Method.GET;
+
             var response = Client.Execute(request);
             return response.Parse<List<string>>();
         }
         public static GeneralResponse<bool> SetInvoiceTransferredRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/einvoice/setInvoiceTransferred");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/einvoice/setTransferred/{invoiceUuid}");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             return response.Parse<bool>();
         }
         public static GeneralResponse<bool> SetInvoiceAnswerRequest(SetInvoiceAnswer model)
         {
-            var request = SetHeaders("/einvoice/setInvoiceAnswer");
+            var request = SetHeaders("/einvoice/setAnswer");
             request.Method = Method.POST;
             request.AddBody(model);
             var response = Client.Execute(request);
@@ -291,12 +265,8 @@ namespace Nes.RestApi.CSharp.Example
         }
         public static GeneralResponse<byte[]> GetUBLXmlContentRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/invoicegeneral/getUBLXmlContent", "application/xml");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/invoicegeneral/ublXmlContent/{invoiceUuid}", "application/xml");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             var responseData = response.Parse<byte[]>();
             string xmlContent = System.Text.Encoding.UTF8.GetString(responseData.Result);
@@ -305,12 +275,8 @@ namespace Nes.RestApi.CSharp.Example
         }
         public static GeneralResponse<byte[]> GetInvoiceHtmlRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/invoicegeneral/getInvoiceHtml", "text/html");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/invoicegeneral/html/{invoiceUuid}", "text/html");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             var responseData = response.Parse<byte[]>();
             string htmlContent = System.Text.Encoding.UTF8.GetString(responseData.Result);
@@ -319,12 +285,8 @@ namespace Nes.RestApi.CSharp.Example
         }
         public static GeneralResponse<byte[]> GetInvoicePdfRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/invoicegeneral/getInvoicePdf", "application/pdf");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/invoicegeneral/pdf/{invoiceUuid}", "application/pdf");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
             var responseData = response.Parse<byte[]>();
             File.WriteAllBytes(@"D:\Invoice.pdf", responseData.Result); //Gelen data istenilen konuma yazdırılabilir.
@@ -333,12 +295,8 @@ namespace Nes.RestApi.CSharp.Example
         }
         public static GeneralResponse<string> GetInvoiceNumberFromUUIDRequest(string invoiceUuid)
         {
-            var request = SetHeaders("/invoicegeneral/getInvoiceNumberFromUUID");
-            request.Method = Method.POST;
-            request.AddBody(new
-            {
-                invoiceUuid = invoiceUuid
-            });
+            var request = SetHeaders($"/invoicegeneral/getInvoiceNumber/{invoiceUuid}");
+            request.Method = Method.GET;
             var response = Client.Execute(request);
 
             return response.Parse<string>();
