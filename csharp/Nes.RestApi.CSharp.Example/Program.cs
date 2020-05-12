@@ -10,10 +10,10 @@ namespace Nes.RestApi.CSharp.Example
     class Program
     {
         public static string accessToken = string.Empty;
-        public static string EInvoiceUUID = "198725EA-9E40-4503-996D-7D9ACD6B97AC";
-        public static string EArchiveInvoiceUUID = "65BF1A86-A2E8-4475-9B7B-806409BBC277";
-        public static string VknTckn = "1234567801";
-        public static string Alias = "urn:mail:defaultpk@nesbilgi.com.tr";
+        public static string EInvoiceUUID = System.Guid.NewGuid().ToString(); // Örnek "198725EA-9E40-4503-996D-7D9ACD6B97AC";
+        public static string EArchiveInvoiceUUID = System.Guid.NewGuid().ToString(); // Örnek "65BF1A86-A2E8-4475-9B7B-806409BBC277";
+        public static string CustomerVknTckn = "1234567802";
+        public static string CustomerAlias = "urn:mail:defaultpk@nesbilgi.com.tr";
 
         static RestClient Client = null;
         static RestRequest Request = null;
@@ -22,18 +22,13 @@ namespace Nes.RestApi.CSharp.Example
         {
             Client = new RestClient(Nes.RestApi.CSharp.Example.Constant.BaseUrl);
 
-            #region Token Alma İşlemi
-            var tokenResult = GetToken(new TokenRequest() { username = "KULLANICI_ADI", password = "SIFRE" });
-            if (tokenResult.ErrorStatus == null) { accessToken = tokenResult.Result.access_token; }
-            #endregion
-
             #region Account
             var templateListResponse = TemplateListRequest(Constant.InvoiceType.eInvoice); // Hesabınızda tanımlı olan XSLT listesinin detaylarını almak için kullanılır. 
             var getTemplateResponse = GetTemplateRequest(new GetTemplateRequest() { TemplateType = GetTemplateType.EInvoice, Title = "TASARIM_BASLIGI" }); //Hesabınızda tanımlı olan XSLT yi almak için kullanılır.
             #endregion
 
             #region Customer
-            var checkResponse = CheckRequest(VknTckn); //Bir firma/kişinin e-Fatura mükellefi olup olmadığını sorgulamak için kullanılır.
+            var checkResponse = CheckRequest(CustomerVknTckn); //Bir firma/kişinin e-Fatura mükellefi olup olmadığını sorgulamak için kullanılır.
             var getAllResponse = GetAllRequest(); //GIB'de kayıtlı bütün E-Fatura mükelleflerini çekmek için kullanılır.
             var downloadZipResponse = DownloadZipRequest(); //GIB'de kayıtlı bütün E-Fatura mükelleflerini ZIP içerisinde XML olarak çekmek için kullanılır.
             #endregion
@@ -55,7 +50,7 @@ namespace Nes.RestApi.CSharp.Example
 
             var saleInvoiceStatusResponse = SaleInvoiceStatusRequest(EInvoiceUUID); //Giden E-Faturaların durumlarını sorgulamak için kullanılır.
             var getUnAnsweredInvoiceUUIDListResponse = GetUnAnsweredInvoiceUUIDListRequest(); //Firmanıza gelen ve cevap verilmemiş olan Ticari Faturaların ETTn listesini almak için kullanılır. Burada dönen listedeki ETTN ler üzerinden faturaya cevap verme işlemini gerçekleştirebilirsiniz.
-            var getUnTransferredInvoiceUUIDListResponse = GetUnTransferredInvoiceUUIDListRequest(Alias); //Firmanıza gelen ve içeriye aktarılmamış (ERP'ye Alınmamış) faturaların ETTN listesini almak için kullanılır. Etiket bilgisi opsiyoneldir. Detalar dokümantasyonda mevcuttur.
+            var getUnTransferredInvoiceUUIDListResponse = GetUnTransferredInvoiceUUIDListRequest(CustomerAlias); //Firmanıza gelen ve içeriye aktarılmamış (ERP'ye Alınmamış) faturaların ETTN listesini almak için kullanılır. Etiket bilgisi opsiyoneldir. Detalar dokümantasyonda mevcuttur.
             var setInvoiceTransferredResponse = SetInvoiceTransferredRequest(EInvoiceUUID); //ERP'ye yazılmış olan Gelen E-Faturanın NESBilgi üzerinde Transfer Edildi olarak işaretlemek için kullanılır.
 
             var setInvoiceAnswerRequest = new SetInvoiceAnswer()
@@ -96,11 +91,17 @@ namespace Nes.RestApi.CSharp.Example
                     ZIPBinaryDataArray = data
                 },
                 invoiceProfile = InvoiceProfile.TICARIFATURA,
-                customerRegisterNumber = VknTckn,
-                eInvoiceAlias = Alias
+                customerRegisterNumber = CustomerVknTckn,
+                eInvoiceAlias = CustomerAlias
             };
             var sendUBLInvoiceResponse = SendUBLInvoiceRequest(sendUBLInvoiceRequest);
             #endregion
+
+            #region Token Alma İşlemi
+            var tokenResult = GetToken(new TokenRequest() { username = "test01@nesbilgi.com.tr", password = "V9zH7Hh55LIl" });
+            if (tokenResult.ErrorStatus == null) { accessToken = tokenResult.Result.access_token; }
+            #endregion
+
 
             #region SendNESInvoice//NESInvoice Formatında XML Göndermek İçin Kullanılır
             var invoice = InvoiceGenerator.GetStandarInvoice();
@@ -121,7 +122,7 @@ namespace Nes.RestApi.CSharp.Example
             {
                 nesInvoice = invoice,
                 invoiceProfile = InvoiceProfile.TICARIFATURA,
-                customerRegisterNumber = VknTckn,
+                customerRegisterNumber = CustomerVknTckn,
                 isDirectSend = true
             };
             var sendNESInvoiceResponse = SendNESInvoiceRequest(sendNESInvoiceRequest);
