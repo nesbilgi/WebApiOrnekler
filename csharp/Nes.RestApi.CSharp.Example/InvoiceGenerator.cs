@@ -24,7 +24,7 @@ namespace Nes.RestApi.CSharp.Example
                     Mail = "info@nesbilgi.com.tr",
                     Name = "NES BİLGİ VERİ TEK. VE SAK. HİZ. A.Ş.",
                     Phone = "216 688 51 00",
-                    RegisterNumber = "6310694807",
+                    RegisterNumber = "1234567801",
                     TaxOffice = "KOZYATAĞI",
                     WebSite = "http://nesbilgi.com.tr",
                 },
@@ -38,7 +38,7 @@ namespace Nes.RestApi.CSharp.Example
                     Mail = "info@nesbilgi.com.tr",
                     Name = "NES BİLGİ VERİ TEK. VE SAK. HİZ. A.Ş.",
                     Phone = "216 688 51 00",
-                    RegisterNumber = "6310694807",
+                    RegisterNumber = "12345678902",
                     TaxOffice = "KOZYATAĞI",
                     WebSite = "http://nesbilgi.com.tr"
                 },
@@ -63,7 +63,7 @@ namespace Nes.RestApi.CSharp.Example
                     IssueDate = DateTime.Now,
                     InvoiceProfile = InvoiceProfile.TEMELFATURA,
                     InvoiceType = SendInvoiceType.SATIS,
-                    InvoiceSerieOrNumber = "NES2016000000001",
+                    InvoiceSerieOrNumber = $"NES{DateTime.Now.Year}000000001", // NES2020000000001 (16 karakter)
                     UUID = Guid.NewGuid().ToString(),
                     IssueTime = DateTime.Now,
                     OrderReference = new KeyValue()

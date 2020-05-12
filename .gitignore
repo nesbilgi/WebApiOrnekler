@@ -6,3 +6,5 @@
 /csharp/Nes.RestApi.CSharp.Example/bin/Debug
 /csharp/Nes.RestApi.CSharp.Example/obj/Debug
 /csharp/.vs/Nes.RestApi.CSharp/v15
+/csharp/packages/*
+/csharp/.vs/*
